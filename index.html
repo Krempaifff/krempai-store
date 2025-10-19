@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krempai Store - Продажа валюты FunTime</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Навигация */
+        .navbar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-item {
+            position: relative;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+        }
+        
+        .nav-link:hover {
+            color: #ff3366;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3);
+        }
+        
+        .nav-link.active {
+            color: #ff3366;
+            background: rgba(255, 51, 102, 0.2);
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.4);
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .main-title {
+            font-family: 'Rubik Wet Paint', cursive;
+            font-size: 4.5rem;
+            color: #ff3366;
+            text-shadow: 0 0 20px rgba(255, 51, 102, 0.7);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #4dabf7;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+        
+        /* Секции товаров */
+        .section {
+            margin: 80px 0;
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+            animation: sectionSlide 0.6s ease-out;
+        }
+        
+        .section-title {
+            font-family: 'Rubik Wet Paint', cursive;
+            font-size: 2.5rem;
+            color: #ff3366;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .product-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 51, 102, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .product-card:hover::before {
+            left: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(255, 51, 102, 0.3);
+            border-color: rgba(255, 51, 102, 0.4);
+        }
+        
+        .product-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #ff3366;
+            text-align: center;
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #4dabf7;
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .product-amount {
+            font-size: 1.1rem;
+            color: #e9ecef;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #ff3366;
+            text-align: center;
+            margin: 15px 0;
+            text-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+        }
+        
+        .buy-button {
+            display: block;
+            width: 100%;
+            background: linear-gradient(45deg, #ff3366, #ff6b6b);
+            color: white;
+            padding: 12px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 700;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
+        }
+        
+        .buy-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 51, 102, 0.6);
+            background: linear-gradient(45deg, #ff6b6b, #ff3366);
+        }
+        
+        .advantages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .advantage-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .advantage-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(255, 51, 102, 0.25);
+        }
+        
+        .advantage-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #ff3366;
+        }
+        
+        .advantage-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #4dabf7;
+            font-weight: 700;
+        }
+        
+        .advantage-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #e9ecef;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff3366, #ff6b6b);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: 40px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 51, 102, 0.6);
+            background: linear-gradient(45deg, #ff6b6b, #ff3366);
+        }
+        
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            border: 2px solid rgba(255, 51, 102, 0.5);
+            box-shadow: 0 0 50px rgba(255, 51, 102, 0.3);
+            position: relative;
+            animation: modalSlide 0.3s ease-out;
+        }
+        
+        .close {
+            color: #ff3366;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close:hover {
+            transform: scale(1.2);
+            text-shadow: 0 0 10px rgba(255, 51, 102, 0.7);
+        }
+        
+        .modal-title {
+            font-family: 'Rubik Wet Paint', cursive;
+            color: #ff3366;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4dabf7;
+            font-weight: 700;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #ff3366;
+            box-shadow: 0 0 10px rgba(255, 51, 102, 0.3);
+        }
+        
+        .card-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 51, 102, 0.3);
+        }
+        
+        .card-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ff3366;
+            text-align: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .card-number:hover {
+            background: rgba(255, 51, 102, 0.1);
+        }
+        
+        .copy-btn {
+            background: linear-gradient(45deg, #ff3366, #ff6b6b);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .copy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
+        }
+        
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #ff3366;
+        }
+        
+        .instruction-step {
+            margin-bottom: 8px;
+            color: #e9ecef;
+        }
+        
+        .next-btn {
+            background: linear-gradient(45deg, #4dabf7, #339af0);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .next-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(77, 171, 247, 0.4);
+        }
+        
+        .order-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .order-info p {
+            margin: 8px 0;
+            color: #e9ecef;
+        }
+        
+        /* Анимации */
+        @keyframes titleGlow {
+            from {
+                text-shadow: 0 0 20px rgba(255, 51, 102, 0.7);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(255, 51, 102, 0.9), 0 0 40px rgba(255, 51, 102, 0.6);
+            }
+        }
+        
+        @keyframes sectionSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translate(0, 0px); }
+            50% { transform: translate(0, -10px); }
+            100% { transform: translate(0, 0px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 3rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .advantages {
+                grid-template-columns: 1fr;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-menu {
+                gap: 15px;
+            }
+            
+            .nav-link {
+                font-size: 0.9rem;
+                padding: 8px 15px;
+            }
+            
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-menu {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas для частиц -->
+    <div id="particles-js"></div>
+    
+    <div class="container">
+        <!-- Навигация -->
+        <nav class="navbar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a class="nav-link active" data-section="main">🏠 Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-section="currency">💰 Валюта</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-section="services">🎮 Услуги</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-section="reviews">⭐ Отзывы</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-section="support">👨‍💻 Тех поддержка</a>
+                </li>
+            </ul>
+        </nav>
+        
+        <!-- Главная страница -->
+        <section id="main" class="section active">
+            <header>
+                <h1 class="main-title floating">Krempai Store</h1>
+                <p class="subtitle">Лучший магазин валюты для FunTime</p>
+                <button class="cta-button pulse" id="mainShopButton">Перейти к покупкам</button>
+            </header>
+            
+            <div class="advantages">
+                <div class="advantage-card">
+                    <div class="advantage-icon">⚡</div>
+                    <h3 class="advantage-title">Мгновенная доставка</h3>
+                    <p class="advantage-text">Получите валюту в течение 30 секунд после оплаты. Автоматическая система доставки 24/7</p>
+                </div>
+                
+                <div class="advantage-card">
+                    <div class="advantage-icon">🛡️</div>
+                    <h3 class="advantage-title">100% Безопасно</h3>
+                    <p class="advantage-text">Гарантируем безопасность сделок. Все операции защищены и анонимны</p>
+                </div>
+                
+                <div class="advantage-card">
+                    <div class="advantage-icon">💰</div>
+                    <h3 class="advantage-title">Лучшие цены</h3>
+                    <p class="advantage-text">Самые выгодные курсы на рынке. Регулярные акции и бонусы для постоянных клиентов</p>
+                </div>
+                
+                <div class="advantage-card">
+                    <div class="advantage-icon">🎮</div>
+                    <h3 class="advantage-title">Прямо в игре</h3>
+                    <p class="advantage-text">Пополнение счета происходит непосредственно в вашем игровом аккаунте FunTime</p>
+                </div>
+                
+                <div class="advantage-card">
+                    <div class="advantage-icon">👨‍💻</div>
+                    <h3 class="advantage-title">Поддержка 24/7</h3>
+                    <p class="advantage-text">Наша техподдержка всегда готова помочь с любыми вопросами в любое время суток</p>
+                </div>
+                
+                <div class="advantage-card">
+                    <div class="advantage-icon">⭐</div>
+                    <h3 class="advantage-title">Топ-продавец</h3>
+                    <p class="advantage-text">Более 10 000 довольных клиентов. Высокий рейтинг и положительные отзывы</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Валюта -->
+        <section id="currency" class="section">
+            <h2 class="section-title">💰 Игровая Валюта</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-icon">💎</div>
+                    <h3 class="product-title">Мини пакет</h3>
+                    <div class="product-amount">50.000.000 монет</div>
+                    <div class="product-price">25 грн</div>
+                    <button class="buy-button" data-name="Мини пакет" data-amount="50.000.000 монет" data-price="25">Купить сейчас</button>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">💰</div>
+                    <h3 class="product-title">Базовый пакет</h3>
+                    <div class="product-amount">100.000.000 монет</div>
+                    <div class="product-price">50 грн</div>
+                    <button class="buy-button" data-name="Базовый пакет" data-amount="100.000.000 монет" data-price="50">Купить сейчас</button>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">🏆</div>
+                    <h3 class="product-title">Стандарт пакет</h3>
+                    <div class="product-amount">150.000.000 монет</div>
+                    <div class="product-price">75 грн</div>
+                    <button class="buy-button" data-name="Стандарт пакет" data-amount="150.000.000 монет" data-price="75">Купить сейчас</button>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">👑</div>
+                    <h3 class="product-title">Премиум пакет</h3>
+                    <div class="product-amount">200.000.000 монет</div>
+                    <div class="product-price">100 грн</div>
+                    <button class="buy-button" data-name="Премиум пакет" data-amount="200.000.000 монет" data-price="100">Купить сейчас</button>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">🚀</div>
+                    <h3 class="product-title">Про пакет</h3>
+                    <div class="product-amount">250.000.000 монет</div>
+                    <div class="product-price">125 грн</div>
+                    <button class="buy-button" data-name="Про пакет" data-amount="250.000.000 монет" data-price="125">Купить сейчас</button>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">💫</div>
+                    <h3 class="product-title">Максимум пакет</h3>
+                    <div class="product-amount">300.000.000 монет</div>
+                    <div class="product-price">150 грн</div>
+                    <button class="buy-button" data-name="Максимум пакет" data-amount="300.000.000 монет" data-price="150">Купить сейчас</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Услуги -->
+        <section id="services" class="section">
+            <h2 class="section-title">🎮 Игровые Услуги</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-icon">🏗️</div>
+                    <h3 class="product-title">Фармилка криперов</h3>
+                    <div class="product-amount">Размер 100x100 блоков</div>
+                    <div class="product-price">300 грн</div>
+                    <button class="buy-button" data-name="Фармилка криперов 100x100" data-amount="Размер 100x100 блоков" data-price="300">Заказать</button>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">⚒️</div>
+                    <h3 class="product-title">Фармилка криперов</h3>
+                    <div class="product-amount">Размер 50x50 блоков</div>
+                    <div class="product-price">150 грн</div>
+                    <button class="buy-button" data-name="Фармилка криперов 50x50" data-amount="Размер 50x50 блоков" data-price="150">Заказать</button>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-icon">🧪</div>
+                    <h3 class="product-title">Постройка зельеварки</h3>
+                    <div class="product-amount">Полная автоматизация</div>
+                    <div class="product-price">100 грн</div>
+                    <button class="buy-button" data-name="Постройка зельеварки" data-amount="Полная автоматизация" data-price="100">Заказать</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Отзывы -->
+        <section id="reviews" class="section">
+            <h2 class="section-title">⭐ Отзывы клиентов</h2>
+            <div style="text-align: center; padding: 60px 20px;">
+                <div class="advantage-icon">⭐</div>
+                <h3 style="color: #4dabf7; margin: 20px 0; font-size: 2rem;">Раздел отзывов скоро появится!</h3>
+                <p style="color: #e9ecef; font-size: 1.1rem;">Мы работаем над добавлением системы отзывов</p>
+            </div>
+        </section>
+
+        <!-- Тех поддержка -->
+        <section id="support" class="section">
+            <h2 class="section-title">👨‍💻 Техническая поддержка</h2>
+            <div style="text-align: center; padding: 60px 20px;">
+                <div class="advantage-icon">👨‍💻</div>
+                <h3 style="color: #4dabf7; margin: 20px 0; font-size: 2rem;">Telegram: @KrempaiiiMZ</h3>
+                <p style="color: #e9ecef; font-size: 1.2rem; margin-bottom: 30px;">Напишите нам в Telegram для быстрой помощи</p>
+                <a href="https://t.me/KrempaiiiMZ" class="cta-button" style="text-decoration: none;" target="_blank">Написать в Telegram</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Модальное окно для ввода ника -->
+    <div id="nicknameModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('nicknameModal')">&times;</span>
+            <h2 class="modal-title">Введите данные</h2>
+            
+            <div class="form-group">
+                <label class="form-label">Ваш игровой никнейм:</label>
+                <input type="text" class="form-input" id="playerNickname" placeholder="Введите ваш ник в игре" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Промокод (необязательно):</label>
+                <input type="text" class="form-input" id="promoCode" placeholder="Введите промокод если есть">
+            </div>
+            
+            <button class="next-btn" onclick="validateNickname()">Продолжить</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно оплаты -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('paymentModal')">&times;</span>
+            <h2 class="modal-title">Оплата заказа</h2>
+            
+            <div class="order-info">
+                <p><strong>Товар:</strong> <span id="modalProductName"></span></p>
+                <p><strong>Количество:</strong> <span id="modalProductAmount"></span></p>
+                <p><strong>Цена:</strong> <span id="modalProductPrice"></span> грн</p>
+                <p><strong>Ваш ник:</strong> <span id="modalPlayerNickname"></span></p>
+            </div>
+            
+            <div class="card-info">
+                <div class="form-label">Карта для оплаты:</div>
+                <div class="card-number" id="cardNumber" onclick="copyCardNumber()">5375 4114 1234 5678</div>
+                <button class="copy-btn" onclick="copyCardNumber()">Скопировать номер карты</button>
+            </div>
+            
+            <div class="instructions">
+                <div class="form-label">Инструкция по оплате:</div>
+                <div class="instruction-step">1. Скопируйте номер карты выше</div>
+                <div class="instruction-step">2. Переведите точную сумму: <strong id="instructionAmount"></strong> грн</div>
+                <div class="instruction-step">3. Ничего не указывайте в комментариях к переводу</div>
+                <div class="instruction-step">4. После оплаты напишите в Telegram: @KrempaiiiMZ</div>
+                <div class="instruction-step">5. Укажите ваш ник и сумму перевода</div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <p style="color: #4dabf7; font-size: 0.9rem;">После оплаты товар будет доставлен в течение 5-15 минут</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрипты для частиц -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Текущий выбранный товар
+        let currentProduct = {};
+        const SECRET_PROMO_CODE = "KREMPIK";
+
+        // Инициализация частиц
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: "#ff3366"
+                },
+                shape: {
+                    type: "circle"
+                },
+                opacity: {
+                    value: 0.5,
+                    random: true
+                },
+                size: {
+                    value: 3,
+                    random: true
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#ff3366",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "repulse"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    }
+                }
+            }
+        });
+
+        // Навигация по разделам
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+        }
+
+        // Открытие модального окна покупки
+        function openPurchaseModal(name, amount, price) {
+            currentProduct = { name, amount, price };
+            document.getElementById('nicknameModal').style.display = 'block';
+        }
+
+        // Закрытие модального окна
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Валидация ника
+        function validateNickname() {
+            const nickname = document.getElementById('playerNickname').value.trim();
+            const promoCode = document.getElementById('promoCode').value.trim();
+            
+            if (!nickname) {
+                alert('Пожалуйста, введите ваш игровой никнейм!');
+                return;
+            }
+            
+            // Проверка промокода
+            let finalPrice = parseInt(currentProduct.price);
+            if (promoCode.toUpperCase() === SECRET_PROMO_CODE) {
+                finalPrice = Math.round(finalPrice * 0.9); // 10% скидка
+                alert('🎉 Промокод применен! Скидка 10%');
+            } else if (promoCode && promoCode.toUpperCase() !== SECRET_PROMO_CODE) {
+                alert('❌ Неверный промокод');
+            }
+            
+            // Заполняем данные в модальном окне оплаты
+            document.getElementById('modalProductName').textContent = currentProduct.name;
+            document.getElementById('modalProductAmount').textContent = currentProduct.amount;
+            document.getElementById('modalProductPrice').textContent = finalPrice;
+            document.getElementById('modalPlayerNickname').textContent = nickname;
+            document.getElementById('instructionAmount').textContent = finalPrice;
+            
+            // Закрываем первое модальное окно и открываем второе
+            closeModal('nicknameModal');
+            document.getElementById('paymentModal').style.display = 'block';
+            
+            // Очищаем поля формы
+            document.getElementById('playerNickname').value = '';
+            document.getElementById('promoCode').value = '';
+        }
+
+        // Копирование номера карты
+        function copyCardNumber() {
+            const cardNumber = document.getElementById('cardNumber').textContent;
+            navigator.clipboard.writeText(cardNumber.replace(/\s/g, '')).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = 'Скопировано!';
+                btn.style.background = 'linear-gradient(45deg, #51cf66, #40c057)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = 'linear-gradient(45deg, #ff3366, #ff6b6b)';
+                }, 2000);
+            });
+        }
+
+        // Инициализация после загрузки страницы
+        document.addEventListener('DOMContentLoaded', function() {
+             // Обработчики для навигации
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    showSection(section);
+                });
+            });
+
+            // Обработчик для кнопки в главном разделе
+            document.getElementById('mainShopButton').addEventListener('click', function() {
+                showSection('currency');
+            });
+
+            // Обработчики для кнопок покупки
+            document.querySelectorAll('.buy-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const name = this.getAttribute('data-name');
+                    const amount = this.getAttribute('data-amount');
+                    const price = this.getAttribute('data-price');
+                    openPurchaseModal(name, amount, price);
+                });
+            });
+
+            // Закрытие модальных окон при клике вне их
+            window.onclick = function(event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
